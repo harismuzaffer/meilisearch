@@ -172,18 +172,18 @@ async fn set_and_search() {
     index
         .search(json!({"q": "C#D#G", "attributesToHighlight": ["content"]}), |response, code| {
             snapshot!(code, @"200 OK");
-            snapshot!(json_string!(response["hits"]), @r###"
+            snapshot!(json_string!(response["hits"]), @r#"
             [
               {
                 "id": 2,
                 "content": "G#D#G#D#G#C#D#G#C#",
                 "_formatted": {
                   "id": "2",
-                  "content": "<em>G</em>#<em>D#</em><em>G</em>#<em>D#</em><em>G</em>#<em>C#</em><em>D#</em><em>G</em>#<em>C#</em>"
+                  "content": "<em>G#</em><em>D#</em><em>G#</em><em>D#</em><em>G#</em><em>C#</em><em>D#</em><em>G#</em><em>C#</em>"
                 }
               }
             ]
-            "###);
+            "#);
         })
         .await;
 
@@ -426,7 +426,7 @@ async fn advanced_synergies() {
     index
         .search(json!({"q": "J. K.", "attributesToHighlight": ["content"]}), |response, code| {
             snapshot!(code, @"200 OK");
-            snapshot!(json_string!(response["hits"]), @r###"
+            snapshot!(json_string!(response["hits"]), @r#"
             [
               {
                 "id": 5,
@@ -457,11 +457,11 @@ async fn advanced_synergies() {
                 "content": "J. R. R. Tolkien",
                 "_formatted": {
                   "id": "2",
-                  "content": "<em>J. R.</em> R. Tolkien"
+                  "content": "<em>J. R. R.</em> Tolkien"
                 }
               }
             ]
-            "###);
+            "#);
         })
         .await;
 }

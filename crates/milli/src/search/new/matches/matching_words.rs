@@ -82,6 +82,15 @@ impl MatchingWords {
                 if token.is_stopword() {
                     continue;
                 }
+                // Exact match: the token's lemma matches the word.
+                if token.lemma() == word {
+                    let ids = &located_words.positions;
+                    return Some(MatchType::Full {
+                        char_count: token.char_end - token.char_start,
+                        byte_len: token.byte_end - token.byte_start,
+                        ids,
+                    });
+                }
                 // if the word is a prefix, we match using starts_with.
                 if located_words.is_prefix && token.lemma().starts_with(word) {
                     let Some((char_index, c)) =
@@ -93,14 +102,6 @@ impl MatchingWords {
                     let (char_count, byte_len) = token.original_lengths(prefix_length);
                     let ids = &located_words.positions;
                     return Some(MatchType::Full { ids, char_count, byte_len });
-                // else we exact match the token.
-                } else if token.lemma() == word {
-                    let ids = &located_words.positions;
-                    return Some(MatchType::Full {
-                        char_count: token.char_end - token.char_start,
-                        byte_len: token.byte_end - token.byte_start,
-                        ids,
-                    });
                 }
             }
         }
